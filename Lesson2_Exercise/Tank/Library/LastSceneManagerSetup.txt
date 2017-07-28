@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/Users/meta42games/Desktop/Unity/Lesson2/Exercise/3D Ball/Assets/Scene/3DBall.unity
+  isLoaded: 1
+  isActive: 1
