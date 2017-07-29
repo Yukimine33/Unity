@@ -1,0 +1,4 @@
+sceneSetups:
+- path: C:/Users/meta42games/Desktop/FPS/Assets/Scene/Game.unity
+  isLoaded: 1
+  isActive: 1
