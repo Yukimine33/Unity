@@ -8,67 +8,63 @@ public class MovePos : MonoBehaviour
     public Camera originCamera;
     public float moveSpeed;
     public float rotateSpeed;
-    RaycastHit hit = new RaycastHit();
+    
     
     bool isRotate = false;
+    bool ifRotateFinish =false;
     bool ifOneStepFinish; //获取一次旋转加移动是否完成
     Vector3 oldPos; //旧的点击点
     Vector3 newPos; //鼠标点击点
-    Vector3 targetDirc;
+    Vector3 targetDirc; //移动方向
 
-    List<Vector3> targetPos; //鼠标点击点的集合
-    int step = 0; //记录列表的第几项
+    List<Vector3> newDirection; //物体移动方向的集合
+    List<Vector3> newPositions; //鼠标点击点的集合
 
-    private void Start()
+    void Start()
     {
-        targetPos = new List<Vector3>();
+        newDirection = new List<Vector3>();
+        newPositions = new List<Vector3>();
         newPos = cube.position;
     }
 
     void Update ()
     {
-        var forward = cube.TransformDirection(Vector3.forward) * 10;
-        Debug.DrawRay(cube.position, forward, Color.green);
+        Debug.DrawRay(cube.position, cube.forward * 5, Color.green);
+
         if (Input.GetMouseButtonDown(0))
         {
             GetPos();
-            isRotate = true;
-            targetPos.Add(targetDirc);
+            isRotate = true; 
+            newPositions.Add(newPos); //每点击一次鼠标就添加下一个要移动到的点
+            newDirection.Add(targetDirc); //每点击一次鼠标就添加下一次要移动的方向
         }
 
-        foreach(var pair in targetPos)
-        {
-            Debug.Log(pair);
-        }
+        Debug.Log(Vector3.Dot(cube.forward, targetDirc.normalized));
 
-        if(!ifOneStepFinish)
+        if (newDirection.Count != 0 && newPositions.Count != 0)
         {
-
-            if (Vector3.Dot(cube.forward, targetPos[0].normalized) < 0.999f)
+            if (Vector3.Dot(cube.forward, newDirection[0].normalized) < 0.99999f)
             {
-                if (isRotate)
+                if (isRotate) //点击鼠标才可以调用旋转函数
                 {
                     //Rotate1();
-                    Rotate2(targetPos[0]);
+                    Rotate2(newDirection[0]); //将移动方向列表中的第一项传进旋转函数中
                 }
             }
             else
             {
-                Move();
+                Move(newPositions[0]); //将移动目标列表中的第一项传进移动函数中
             }
         }
-        else
-        {
-            targetPos.RemoveAt(0);
-            ifOneStepFinish = false;
-        }
-        Debug.Log(Vector3.Dot(cube.forward, targetPos[0].normalized));
-        
     }
 
+    /// <summary>
+    /// 获取鼠标点击点的坐标
+    /// </summary>
     void GetPos()
     {
         oldPos = newPos;
+        RaycastHit hit = new RaycastHit();
         Ray ray = originCamera.ScreenPointToRay(Input.mousePosition);
         Physics.Raycast(ray, out hit, 100);
         if (hit.transform != null && hit.collider.gameObject.tag == "Plane")
@@ -76,19 +72,23 @@ public class MovePos : MonoBehaviour
             newPos = hit.point;
             newPos.y = 1;
         }
-        targetDirc = newPos - oldPos; 
+        targetDirc = newPos - oldPos;
+        Debug.DrawLine(oldPos, newPos, Color.blue, 10);
+        
     }
 
-    void Move()
+    //物体移动
+    void Move(Vector3 targetPos)
     {
-        var dirc = newPos - cube.position;
+        var dirc = targetPos - cube.position; //本次移动的终点与物体坐标的差向量
         if (dirc.magnitude > 0.1f)
         {
             cube.position += dirc.normalized * moveSpeed * Time.deltaTime;
         }
         else
         {
-            ifOneStepFinish = true;
+            newDirection.RemoveAt(0); //本次旋转完毕后删除相关列表第一项
+            newPositions.RemoveAt(0); //本次移动完毕后删除相关列表第一项
         }
     }
     
