@@ -88,11 +88,12 @@ public class Map : MonoBehaviour
         if(ifReachEnd && !ifFindPathOver)
         {
             FindShortestPath(nextPathPos);
-        }
-        else
-        {
-            Move(pathPos);
-        }
+        }  
+
+        
+        //Move(pathPos);
+        
+        
     }
 
     /// <summary>
@@ -151,6 +152,9 @@ public class Map : MonoBehaviour
             getPos.x = Mathf.RoundToInt(hitPoint.x); 
             getPos.z = Mathf.RoundToInt(hitPoint.z);
             startBox = Instantiate(startAndEnd, new Vector3(getPos.x, startAndEnd.position.y, getPos.z), Quaternion.identity);
+
+           
+
             count += 1;
         }
 
@@ -218,7 +222,6 @@ public class Map : MonoBehaviour
         int currentStep = searchMap[pos.x, pos.z].step; //传入的pos的step
         if (currentStep == 0) //如果传进来的pos为起点，则停止
         {
-            //pathPos.Push(pos);
             ifFindPathOver = true;
             return;
         }

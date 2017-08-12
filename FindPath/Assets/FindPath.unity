@@ -218,13 +218,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 897619114}
-  m_LocalRotation: {x: 0.48984417, y: -0, z: -0, w: 0.87181}
-  m_LocalPosition: {x: 9.91, y: 19.2, z: -2.8}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 9.91, y: 19.2, z: 9.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 58.661003, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &1142072705
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 1455840201}
   - component: {fileID: 1455840200}
   - component: {fileID: 1455840204}
+  - component: {fileID: 1455840205}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Plane
@@ -344,9 +345,30 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1455840199}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7b3eeec976e20844bb1d54d12852d64e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wall: {fileID: 4859910317374858, guid: f0a7d8e04589e414482713e3d389bb6e, type: 2}
+  wallParent: {fileID: 1676005825}
+  startAndEnd: {fileID: 4730652785741850, guid: 4a53d62fb4fc1d84e9645321dadc5342,
+    type: 2}
+  searchItem: {fileID: 4533861349928128, guid: 8ce5190d8e2701c4dae23e5f3a2ae3f3, type: 2}
+  searchItemParent: {fileID: 778268673}
+  findPathItem: {fileID: 4335059844425504, guid: 295e63c9272148e40bd2cb70a039b64f,
+    type: 2}
+  findPathParent: {fileID: 1142072706}
+  mainCamera: {fileID: 897619118}
+--- !u!114 &1455840205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1455840199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 953b13c3287905c45933e28104ced35e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   wall: {fileID: 4859910317374858, guid: f0a7d8e04589e414482713e3d389bb6e, type: 2}
