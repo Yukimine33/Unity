@@ -12,7 +12,7 @@ public class Launcher : MonoBehaviour
         DontDestroyOnLoad(manager);
         manager.AddComponent<UIManager>();
 
-        var menuPage = UIManager.Instance.CreatePage("Page_GetBag");
-        menuPage.AddComponent<AddBagUI>();
+        var menuPage = UIManager.Instance.CreatePage("Page_OpenBag");
+        menuPage.AddComponent<OpenBag>();
     }
 }
