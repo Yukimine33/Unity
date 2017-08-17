@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 创建UIManager并添加最开始的菜单界面
+/// </summary>
 public class Launcher : MonoBehaviour
 {
     public GameObject manager;
@@ -12,7 +15,6 @@ public class Launcher : MonoBehaviour
         DontDestroyOnLoad(manager);
         manager.AddComponent<UIManager>();
 
-        var menuPage = UIManager.Instance.CreatePage("Page_OpenBag");
-        menuPage.AddComponent<OpenBag>();
+        var menuPage = UIManager.Instance.CreatePageUI<Page_OpenBag>();
     }
 }

@@ -2,33 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class PageBag : MonoBehaviour
+public class Page_Bag : UIBase
 {
-    GameObject item;
+    GameObject item; //Com_Item
     public RectTransform rectTran;
     public GridLayoutGroup grid;
-    public Button clickButton;
-    public Button deleteButton;
-    public Button exitButton;
-    public Text itemCountText;
-    int count = 0;
-    int itemCount = 1;
 
-	void Start ()
+    public Button addButton; //添加物体按钮
+    public Button deleteButton; //删除物体按钮
+    public Button exitButton; //退出按钮
+
+    public GameObject movePoint;
+    int count = 0; //用来记录已生成的Com_Item的数量
+
+    void Start ()
     {
+        //获取Com_Item
         item = Resources.Load("Com_Item") as GameObject;
 
         rectTran = gameObject.transform.Find("Canvas/Scrl_Bag/Viewport/Content").GetComponent<RectTransform>();
         grid = gameObject.transform.Find("Canvas/Scrl_Bag/Viewport/Content").GetComponent<GridLayoutGroup>();
+        movePoint = gameObject.transform.Find("Canvas/Tran_DeleteArea/Tran_MoveItem").gameObject;
 
-        clickButton = gameObject.transform.Find("Canvas/Btn_AddItem").GetComponent<Button>();
+        addButton = gameObject.transform.Find("Canvas/Btn_AddItem").GetComponent<Button>();
         deleteButton = gameObject.transform.Find("Canvas/Btn_DeleteItem").GetComponent<Button>();
         exitButton = gameObject.transform.Find("Canvas/Btn_Exit").GetComponent<Button>();
 
-        clickButton.onClick.AddListener(AddItem);
-        deleteButton.onClick.AddListener(DeleteItem);
-        exitButton.onClick.AddListener(Exit);
+        SetEventTriggerListener(addButton.gameObject).onClick = AddItem;
+        SetEventTriggerListener(deleteButton.gameObject).onClick = DeleteItem;
+        SetEventTriggerListener(exitButton.gameObject).onClick = Exit;
     }
 
     /// <summary>
@@ -36,31 +40,7 @@ public class PageBag : MonoBehaviour
     /// </summary>
     void AddItem()
     {
-        /*
-        if (itemCount == 1)
-        {
-            item = Instantiate(item);
-            item.transform.SetParent(rectTran);
-            item.transform.localScale = Vector3.one;
-            item.AddComponent<Drag>();
-            count += 1;
-        }
-
-        itemCountText = item.transform.Find("Count").GetComponent<Text>();
-        itemCountText.text = itemCount.ToString();
-        itemCount += 1;
-
-        if(itemCount > limitPerGrid)
-        {
-            itemCount = 1;
-        }
-        */
-
-        var item_clone = Instantiate(item);
-        item_clone.transform.SetParent(rectTran);
-        item_clone.transform.localScale = Vector3.one;
-        var item_child = item_clone.transform.Find("Item");
-        item_child.gameObject.AddComponent<Drag>();
+        UIManager.Instance.CreateComUI<Com_Item>(rectTran);
         count += 1;
 
         ChangeHeight();
@@ -93,7 +73,6 @@ public class PageBag : MonoBehaviour
 
     void Exit()
     {
-        //Destroy(gameObject);
-        gameObject.SetActive(false);
+        UIManager.Instance.ClosePageUI<Page_Bag>();
     }
 }
