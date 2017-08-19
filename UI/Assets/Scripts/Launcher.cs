@@ -7,14 +7,35 @@ using UnityEngine;
 /// </summary>
 public class Launcher : MonoBehaviour
 {
-    public GameObject manager;
 
 	public void Awake ()
     {
-        manager = new GameObject("UIManager");
+        RegistryManager();
+        InitConfig();
+        CreateMenu();
+    }
+
+    /// <summary>
+    /// 用来创建管理器并添加相关脚本
+    /// </summary>
+    public void RegistryManager()
+    {
+        GameObject manager = new GameObject("Manager");
         DontDestroyOnLoad(manager);
         manager.AddComponent<UIManager>();
+        manager.AddComponent<ConfigBagData>();
+    }
 
-        var menuPage = UIManager.Instance.CreatePageUI<Page_OpenBag>();
+    /// <summary>
+    /// 预加载相关资源
+    /// </summary>
+    public void InitConfig()
+    {
+        ConfigBagData.Instance.Init();
+    }
+
+    public void CreateMenu()
+    {
+        UIManager.Instance.CreatePageUI<Page_OpenBag>();
     }
 }

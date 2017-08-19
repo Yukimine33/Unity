@@ -7,9 +7,9 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance; //静态单例
     public GameObject UIRoot;
 
-    private Dictionary<string, UIBase> uiDict = new Dictionary<string, UIBase>(); //建立存储page的字典
+    private Dictionary<string, UIBase> uiPageDict = new Dictionary<string, UIBase>(); //建立存储page的字典
 
-	void Awake ()
+    void Awake ()
     {
         Instance = this;
         Init();
@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void Init()
     {
-        UIRoot = Resources.Load("UIRoot") as GameObject;
+        UIRoot = Resources.Load("Prefabs/UIRoot") as GameObject;
         if (UIRoot != null)
         {
             UIRoot = Instantiate(UIRoot);
@@ -38,9 +38,11 @@ public class UIManager : MonoBehaviour
     public T GetPageUI<T>() where T : UIBase
     {
         string name = typeof(T).Name;
-        Debug.Log("name:" + name);
-        Debug.Log("uiDict[name]:" + uiDict[name]);
-        return uiDict[name] as T;
+        if(!uiPageDict.ContainsKey(name))
+        {
+            Debug.LogError(name + " not found");
+        }
+        return uiPageDict[name] as T;
     }
 
     /// <summary>
@@ -52,7 +54,7 @@ public class UIManager : MonoBehaviour
     {
         string name = typeof(T).Name;
 
-        var targetPage = Resources.Load(name) as GameObject;
+        var targetPage = Resources.Load<GameObject>("Prefabs/" + name);
 
         if(targetPage == null)
         {
@@ -66,7 +68,7 @@ public class UIManager : MonoBehaviour
         targetPage.transform.localScale = Vector3.one;
         var menuScript = targetPage.AddComponent<T>();
 
-        uiDict.Add(name, menuScript);
+        uiPageDict.Add(name, menuScript);
 
         return menuScript as T;
     }
@@ -81,7 +83,7 @@ public class UIManager : MonoBehaviour
     {
         string name = typeof(T).Name;
 
-        var comUI = Resources.Load(name) as GameObject;
+        var comUI = Resources.Load<GameObject>("Prefabs/" + name);
         if (comUI == null)
         {
             Debug.LogError("Error: no " + name + " exist");
@@ -104,6 +106,9 @@ public class UIManager : MonoBehaviour
     public void ClosePageUI<T>()
     {
         var name = typeof(T).Name;
-        uiDict[name].gameObject.SetActive(false);
+        Destroy(uiPageDict[name].gameObject);
+        uiPageDict.Remove(name);
+        ConfigBagData.Instance.RefreshExportJson(); //关闭背包页面时将更新后的数据输出到存档中
+        //uiPageDict[name].gameObject.SetActive(false);
     }
 }

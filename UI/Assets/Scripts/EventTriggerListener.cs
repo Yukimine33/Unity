@@ -4,19 +4,29 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler
+public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IBeginDragHandler, IDragHandler
 {
     //Unity中自动添加委托的方法
-    public UnityAction onClick;
+    public UnityAction<GameObject> onClick;
     public UnityAction<PointerEventData> onBeginDrag;
     public UnityAction<PointerEventData> onDrag;
     public UnityAction<PointerEventData> onPointerUp;
+    public UnityAction<PointerEventData> onPointerDown;
+    public UnityAction<PointerEventData> onPointerEnter;
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if(onClick != null)
         {
-            onClick();
+            onClick(gameObject);
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (onPointerEnter != null)
+        {
+            onPointerEnter(eventData);
         }
     }
 
@@ -25,6 +35,14 @@ public class EventTriggerListener : MonoBehaviour, IPointerClickHandler, IPointe
         if(onPointerUp != null)
         {
             onPointerUp(eventData);
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (onPointerDown != null)
+        {
+            onPointerDown(eventData);
         }
     }
 

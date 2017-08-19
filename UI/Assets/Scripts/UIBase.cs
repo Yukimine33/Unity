@@ -1,12 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 用来存储UI的通用功能
 /// </summary>
 public class UIBase : MonoBehaviour
 {
+    public void SetSprite(Image image, string icon)
+    {
+        image.sprite = Resources.Load<Sprite>("Icons/" + icon);
+    }
+
+    public void SetName(Text text, string name)
+    {
+        text.text = name;
+    }
+
     /// <summary>
     /// 获取EventTrigger的监听器
     /// </summary>

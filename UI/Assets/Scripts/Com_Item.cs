@@ -2,18 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Com_Item : UIBase
 {
     public Transform targDrag;
 
-	void Start ()
+    public configData data;
+    public Image sourceImage;
+    public Text nameText;
+
+    void Start ()
     {
         targDrag = gameObject.transform.Find("Drag");
+
+        sourceImage = gameObject.transform.Find("Drag/Image").GetComponent<Image>();
+        nameText = gameObject.transform.Find("Drag/Text").GetComponent<Text>();
 
         SetEventTriggerListener(targDrag.gameObject).onBeginDrag = OnBeginDrag;
         SetEventTriggerListener(targDrag.gameObject).onDrag = OnDrag;
         SetEventTriggerListener(targDrag.gameObject).onPointerUp = OnPointerUp;
+
+        SetIcon();
+        SetText();
+    }
+
+    public void SetIcon()
+    {
+        SetSprite(sourceImage, data.source);
+    }
+
+    public void SetText()
+    {
+        SetName(nameText, data.name);
     }
 
     /// <summary>
@@ -44,6 +65,7 @@ public class Com_Item : UIBase
         targDrag.SetParent(gameObject.transform);
         if(eventData.pointerCurrentRaycast.gameObject != null && eventData.pointerCurrentRaycast.gameObject.name == "Img_DeleteArea")
         {
+            BagData.Instance.curItemDict[data.id.ToString()].count -= 1;
             Destroy(gameObject);
         }
         else
